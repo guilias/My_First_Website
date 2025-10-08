@@ -58,6 +58,17 @@ let retangulo1 = desenhaRetangulos("black", 0, 0, 20, 20);
 let retangulo2 = desenhaRetangulos("red", 40, 40, 10, 10);
 let retangulo3 = desenhaRetangulos("blue", null, null, 50, 50)
 
+//adiciona o "sinal" e cria variável para rastrear teclas pressionadas
+let teclasPressionadas = {};
+
+document.addEventListener('keydown', function(evento){
+    teclasPressionadas[evento.key] = true;
+})
+
+document.addEventListener('keyup', function(evento){
+    teclasPressionadas[evento.key] = false;
+})
+
 function animacao(){
     //limpa o canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -77,23 +88,22 @@ function animacao(){
 
 
     //movimento retangulo3
-    if(tecla == 'ArrowUp')   {retangulo2.y = retangulo2.y-10}
-    if(tecla == 'ArrowDown') {retangulo2.y = retangulo2.y+10}  
-    if(tecla == 'ArrowLeft') {retangulo2.x = retangulo2.x-10}  
-    if(tecla == 'ArrowRight'){retangulo2.x = retangulo2.x+10}
-
+    if(teclasPressionadas['ArrowUp']){retangulo2.y -= 10;}
+    if(teclasPressionadas['ArrowDown']){retangulo2.y += 10;}
+    if(teclasPressionadas['ArrowLeft']){retangulo2.x -= 10;}
+    if(teclasPressionadas['ArrowRight']){retangulo2.x += 10;}
     //teleportar para lados opostos
-    if (retangulo3.x > canvas.width){
-    retangulo3.x = 0;
+    if (retangulo2.x > canvas.width){
+    retangulo2.x = 0;
     }
-    if (retangulo3.x < 0){
-        retangulo3.x = canvas.width;
+    if (retangulo2.x < 0){
+        retangulo2.x = canvas.width;
     }
-    if (retangulo3.y > canvas.height){
-        retangulo3.y = 0;
+    if (retangulo2.y > canvas.height){
+        retangulo2.y = 0;
     }
-    if (retangulo3.y < 0){
-        retangulo3.y = canvas.height;
+    if (retangulo2.y < 0){
+        retangulo2.y = canvas.height;
     }
 
     //desenha ambos retangulos
@@ -106,16 +116,9 @@ function animacao(){
 }
 animacao();
 
-//adiciona o "sinal"
-let teclasPressionadas = {};
 
-document.addEventListener('keydown', function(evento){
-    teclasPressionadas[evento.key = true];
-})
 
-document.addEventListener('keyup', function(evento){
-    teclasPressionadas[evento.key = false];
-})
+
 
 addEventListener ('mousemove', function(evento) {
    let rect = canvas.getBoundingClientRect();
