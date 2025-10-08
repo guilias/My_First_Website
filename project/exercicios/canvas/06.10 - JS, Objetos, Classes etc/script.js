@@ -117,14 +117,6 @@ document.addEventListener('keyup', function(evento){
     teclasPressionadas[evento.key = false];
 })
 
-    
-    //diagonais
-    if(tecla == 'ArrowUp' && tecla == 'ArrowLeft') {retangulo2 = retangulo2.y-5 && retangulo2.x-5}
-    if(tecla == 'ArrowUp' && tecla == 'ArrowRight') {retangulo2 = retangulo2.y-5 && retangulo2.x+5}
-    if(tecla == 'ArrowDown' && tecla == 'ArrowLeft') {retangulo2 = retangulo2.y+5 && retangulo2.x-5}
-    if(tecla == 'ArrowDown' && tecla == 'ArrowLRight') {retangulo2 = retangulo2.y+5 && retangulo2.x+5}
-})
-
 addEventListener ('mousemove', function(evento) {
    let rect = canvas.getBoundingClientRect();
    let x_mouse = evento.clientX - rect.left;
