@@ -1,0 +1,19 @@
+body{
+    background-color: beige;
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-item{
+    display: flex;
+    flex-direction: column;
+}
+
+#canvas_01{
+    background-color: white;
+}
