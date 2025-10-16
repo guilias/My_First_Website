@@ -2,9 +2,28 @@ let canvas = document.getElementById('game_canvas');
 let ctx = canvas.getContext('2d');
 
 
-function playerJump(){
-    
-}
+
+function detectaColisao(areaJogador, areaObjeto){
+    if (areaJogador.x < areaObjeto.x + areaObjeto.largura &&
+        areaJogador.x + areaJogador.largura > areaObjeto.x &&
+        areaJogador.y < areaObjeto.y + areaObjeto.altura &&
+        areaJogador.y + areaJogador.altura > areaObjeto.y)
+    {
+        ctx.beginPath();
+        ctx.font = '50px Arial';
+        ctx.fillStyle = 'black';
+        ctx.fillText('Colisão detectada!', 10, 50);
+        ctx.closePath();
+    } else {
+        ctx.beginPath();
+        ctx.font = '50px Arial';
+        ctx.fillStyle = 'black';
+        ctx.fillText('Colisão não detectada!', 10, 50);
+        ctx.closePath();
+    }
+};
+
+
 
 function desenhaRetangulos(cor, x, y, largura, altura){
     return {
@@ -22,7 +41,10 @@ function desenhaRetangulos(cor, x, y, largura, altura){
     };
 }
 
-let player = desenhaRetangulos("red", 0, canvas.height - 160, 80, 160);
+let jogador = desenhaRetangulos("red", 0, canvas.height - 160, 80, 160);
+let teste = desenhaRetangulos("blue", 100, 100, 100, 100);
+
+const objetos = [teste]
 
 //adiciona o "sinal" e cria variável para rastrear teclas pressionadas
 let teclasPressionadas = {};
@@ -40,31 +62,37 @@ function animacao(){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     //movimento retangulo3
-    if(teclasPressionadas['ArrowUp']){player.y -= 8;}
-    if(teclasPressionadas['ArrowDown']){player.y += 8;}
-    if(teclasPressionadas['ArrowLeft']){player.x -= 8;}
-    if(teclasPressionadas['ArrowRight']){player.x += 8;}
+    if(teclasPressionadas['ArrowUp']){jogador.y -= 8;}
+    if(teclasPressionadas['ArrowDown']){jogador.y += 8;}
+    if(teclasPressionadas['ArrowLeft']){jogador.x -= 8;}
+    if(teclasPressionadas['ArrowRight']){jogador.x += 8;}
     //teleportar para lados opostos
-    if (player.x > canvas.width){
-    player.x = 0;
+    if (jogador.x > canvas.width){
+    jogador.x = 0;
     }
-    if (player.x < 0){
-        player.x = canvas.width;
+    if (jogador.x < 0){
+        jogador.x = canvas.width;
     }
-    if (player.y > canvas.height){
-        player.y = 0;
+    if (jogador.y > canvas.height){
+        jogador.y = 0;
     }
-    if (player.y < 0){
-        player.y = canvas.height;
+    if (jogador.y < 0){
+        jogador.y = canvas.height;
     }
 
     //desenha ambos retangulos
-    player.desenha(ctx);
+    jogador.desenha(ctx);
+    teste.desenha(ctx);
+    
+    //chama a função de colisão
+    detectaColisao(jogador, objetos[0]);
 
-
+    //chama animação (?)
     requestAnimationFrame(animacao);
 }
+
 animacao();
+
 
 
 
