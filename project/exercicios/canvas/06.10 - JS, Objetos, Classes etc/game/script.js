@@ -42,9 +42,9 @@ function desenhaRetangulos(cor, x, y, largura, altura){
 }
 
 let jogador = desenhaRetangulos("red", 0, canvas.height - 160, 80, 160);
-let teste = desenhaRetangulos("blue", 100, 100, 100, 100);
+let teste [desenhaRetangulos("blue", 100, 100, 100, 100)];
 
-const objetos = [teste]
+
 
 //adiciona o "sinal" e cria variável para rastrear teclas pressionadas
 let teclasPressionadas = {};
@@ -85,7 +85,7 @@ function animacao(){
     teste.desenha(ctx);
     
     //chama a função de colisão
-    detectaColisao(jogador, objetos[0]);
+    detectaColisao(jogador, objetos);
 
     //chama animação (?)
     requestAnimationFrame(animacao);
