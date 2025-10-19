@@ -3,26 +3,49 @@ let ctx = canvas.getContext('2d');
 
 
 
+function fisicaBasica(areaJogador, areaObjeto){
+    if(areaJogador.y < areaObjeto.y + areaObjeto.altura && areaJogador.y + areaJogador.altura > areaObjeto.y){
+        jogadorNoChao = true;
+        ctx.font = '50px Arial';
+        ctx.fillStyle = 'black';
+        ctx.fillText('...', canvas.width - 100, canvas.height);
+        jogador.y -= 5;
+    }
+    else{
+        jogadorNoChao = false;
+    }
+}
+
 function detectaColisao(areaJogador, areaObjeto){
     if (areaJogador.x < areaObjeto.x + areaObjeto.largura &&
         areaJogador.x + areaJogador.largura > areaObjeto.x &&
         areaJogador.y < areaObjeto.y + areaObjeto.altura &&
         areaJogador.y + areaJogador.altura > areaObjeto.y)
     {
-        ctx.beginPath();
         ctx.font = '50px Arial';
         ctx.fillStyle = 'black';
         ctx.fillText('Colisão detectada!', 10, 50);
-        ctx.closePath();
-    } else {
-        ctx.beginPath();
+        fisicaBasica(areaJogador, areaObjeto) //chama a função de física para verficiar se o jogador está no chão ou não
+        colisao = true;
+
+    } else{
         ctx.font = '50px Arial';
         ctx.fillStyle = 'black';
         ctx.fillText('Colisão não detectada!', 10, 50);
-        ctx.closePath();
+        colisao = false;
     }
 };
 
+// function checaPosicaoJogador(){
+//     if (colisao == false){
+//         posicaoJogadorX = jogador.x
+//         posicaoJogadorY = jogador.y
+//     }
+//     else{
+//         jogador.x = posicaoJogadorX
+//         jogador.y = posicaoJogadorY
+//     }
+// }
 
 
 function desenhaRetangulos(cor, x, y, largura, altura){
@@ -41,8 +64,23 @@ function desenhaRetangulos(cor, x, y, largura, altura){
     };
 }
 
-let jogador = desenhaRetangulos("red", 0, canvas.height - 160, 80, 160);
-let teste [desenhaRetangulos("blue", 100, 100, 100, 100)];
+function pular(){
+    if(teclasPressionadas['Space'] && jogadorNoChao == true)
+        jogador.y += 30;
+}
+
+let jogador = desenhaRetangulos("red", 700, 0, 80, 160);
+let jogadorNoChao;
+let colisao;
+let posicaoJogadorX;
+let posicaoJogadorY;
+
+let fantasma = desenhaRetangulos("black", jogador.x, jogador.y, 80, 160);
+fantasma.x = jogador.x
+fantasma.y = jogador.y
+
+let teste = desenhaRetangulos("blue", 0, 700, canvas.width, 10);
+
 
 
 
@@ -61,14 +99,21 @@ function animacao(){
     //limpa o canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    //movimento retangulo3
-    if(teclasPressionadas['ArrowUp']){jogador.y -= 8;}
-    if(teclasPressionadas['ArrowDown']){jogador.y += 8;}
-    if(teclasPressionadas['ArrowLeft']){jogador.x -= 8;}
-    if(teclasPressionadas['ArrowRight']){jogador.x += 8;}
+    //movimento retangulo
+    if(teclasPressionadas['ArrowUp'])
+        {jogador.y -= 8;}
+    if(teclasPressionadas['ArrowDown'])
+        {jogador.y += 8;}
+    if(teclasPressionadas['ArrowLeft'])
+        {jogador.x -= 8;}
+    if(teclasPressionadas['ArrowRight'])
+        {jogador.x += 8;}
+
+
+
     //teleportar para lados opostos
     if (jogador.x > canvas.width){
-    jogador.x = 0;
+        jogador.x = 0;
     }
     if (jogador.x < 0){
         jogador.x = canvas.width;
@@ -80,12 +125,26 @@ function animacao(){
         jogador.y = canvas.height;
     }
 
+    
+    if (jogadorNoChao == false){
+        jogador.y += 5;
+    }
+
+
     //desenha ambos retangulos
     jogador.desenha(ctx);
     teste.desenha(ctx);
-    
+    fantasma.desenha(ctx)
+
     //chama a função de colisão
-    detectaColisao(jogador, objetos);
+    detectaColisao(jogador, teste);
+
+    //verifica a posicao do jogador constantemente
+    // checaPosicaoJogador()
+
+    fisicaBasica(jogador, teste)
+
+    pular()
 
     //chama animação (?)
     requestAnimationFrame(animacao);
@@ -93,17 +152,3 @@ function animacao(){
 
 animacao();
 
-
-
-
-
-
-addEventListener ('mousemove', function(evento) {
-   let rect = canvas.getBoundingClientRect();
-   let x_mouse = evento.clientX - rect.left;
-   let y_mouse = evento.clientY - rect.top;
-   console.log(x_mouse, y_mouse);
-
-   retangulo3.x = x_mouse;
-   retangulo3.y = y_mouse;
-});
