@@ -47,7 +47,6 @@ function detectaColisao(areaJogador, areaObjeto){
 //     }
 // }
 
-
 function desenhaRetangulos(cor, x, y, largura, altura){
     return {
         x: x,
@@ -65,8 +64,8 @@ function desenhaRetangulos(cor, x, y, largura, altura){
 }
 
 function pular(){
-    if(teclasPressionadas['Space'] && jogadorNoChao == true)
-        jogador.y += 30;
+    if(teclasPressionadas['x'])
+        jogador.y -= 30 * 2;
 }
 
 let jogador = desenhaRetangulos("red", 700, 0, 80, 160);
@@ -86,15 +85,14 @@ let teste = desenhaRetangulos("blue", 0, 700, canvas.width, 10);
 
 //adiciona o "sinal" e cria variável para rastrear teclas pressionadas
 let teclasPressionadas = {};
-
 document.addEventListener('keydown', function(evento){
     teclasPressionadas[evento.key] = true;
 })
-
 document.addEventListener('keyup', function(evento){
     teclasPressionadas[evento.key] = false;
 })
 
+//ONDE A MAGIA ACONTECE
 function animacao(){
     //limpa o canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
