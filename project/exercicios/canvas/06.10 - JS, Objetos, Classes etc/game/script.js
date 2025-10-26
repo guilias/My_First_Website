@@ -76,7 +76,7 @@ let colisao;
 let jogadorNoChao = false;
 let velocidadeVertical = 0;
 const gravidade = 2;
-const forcaPulo = -5;
+const forcaPulo = -6;
 
 let posicaoJogadorX;
 let posicaoJogadorY;
@@ -84,11 +84,11 @@ let posicaoJogadorY;
 //declara objetos
 let teste = desenhaRetangulos("blue", 0, 700, canvas.width, 10);
 let teste2 = desenhaRetangulos("blue", 100, 0, 10, canvas.height);
-let teste3 = desenhaRetangulos("blue", canvas.width / 2, 550, 400, 10);
+let teste3 = desenhaRetangulos("blue", canvas.width / 2, 500, 400, 10);
 
 //estado do jogo
 let jogoPausado = false;
-let teclaDePausarPressionada = false;
+let teclaDePausarPressionada = false; //variável criada para evitar bugs ao pausar o jogo
 
 //adiciona o "sinal" e cria variável para rastrear teclas pressionadas
 let teclasPressionadas = {};
