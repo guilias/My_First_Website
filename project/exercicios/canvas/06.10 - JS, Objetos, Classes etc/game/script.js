@@ -1,8 +1,6 @@
 let canvas = document.getElementById('game_canvas');
 let ctx = canvas.getContext('2d');
 
-
-
 function detectaColisao(areaJogador, areaObjeto){
     if (areaJogador.x < areaObjeto.x + areaObjeto.largura &&
         areaJogador.x + areaJogador.largura > areaObjeto.x &&
@@ -69,7 +67,7 @@ function desenhaRetangulos(cor, x, y, largura, altura){
             ctx.closePath();
         }
     };
-}
+};
 
 //declara jogador e variáveis relacionadas
 let jogador = desenhaRetangulos("red", 700, 0, 80, 160);
@@ -78,7 +76,7 @@ let colisao;
 let jogadorNoChao = false;
 let velocidadeVertical = 0;
 const gravidade = 2;
-const forcaPulo = -4;
+const forcaPulo = -5;
 
 let posicaoJogadorX;
 let posicaoJogadorY;
@@ -86,10 +84,11 @@ let posicaoJogadorY;
 //declara objetos
 let teste = desenhaRetangulos("blue", 0, 700, canvas.width, 10);
 let teste2 = desenhaRetangulos("blue", 100, 0, 10, canvas.height);
+let teste3 = desenhaRetangulos("blue", canvas.width / 2, 550, 400, 10);
 
-
-
-
+//estado do jogo
+let jogoPausado = false;
+let teclaDePausarPressionada = false;
 
 //adiciona o "sinal" e cria variável para rastrear teclas pressionadas
 let teclasPressionadas = {};
@@ -100,65 +99,88 @@ document.addEventListener('keyup', function(evento){
     teclasPressionadas[evento.key] = false;
 })
 
+function pausarJogo(){
+    if(teclasPressionadas['p'] && !teclaDePausarPressionada){
+        jogoPausado = !jogoPausado;
+        teclaDePausarPressionada = !teclaDePausarPressionada; //inverte o próprio valor. ('!' opera como inversor)
+    }
 
-//ONDE A MAGIA ACONTECE
+    //quando a tecla for solta...
+    if(!teclasPressionadas['p']){
+        teclaDePausarPressionada = false;
+    }
+
+    //símbolo visual para pausado e despausado
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.font = "30px Arial";
+    ctx.fillStyle = "black";
+    ctx.textAlign = 'center';
+    if(jogoPausado == true){
+        ctx.fillText("||", canvas.width / 2, 100);
+    }
+    else{
+        ctx.fillText(">", canvas.width / 2, 100);
+    }
+}
+
+//o jogo em si, frame por frame
 function animacao(){
     //reseta o canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    //movimento retangulo
-    if(teclasPressionadas['ArrowDown'] || teclasPressionadas['s'])
-        {jogador.y += 10;}
-    if(teclasPressionadas['ArrowLeft'] || teclasPressionadas['a'])
-        {jogador.x -= 10;}
-    if(teclasPressionadas['ArrowRight'] || teclasPressionadas['d'])
-        {jogador.x += 10;}
+    pausarJogo();
+    //antes de todar ou não o jogo, verifica se ele está despausada:
+    if(jogoPausado == false){
+         //movimento do jogador
+        if(teclasPressionadas['ArrowDown'] || teclasPressionadas['s'])
+            {jogador.y += 10;}
+        if(teclasPressionadas['ArrowLeft'] || teclasPressionadas['a'])
+            {jogador.x -= 10;}
+        if(teclasPressionadas['ArrowRight'] || teclasPressionadas['d'])
+            {jogador.x += 10;}
 
-    //pulo
-    if((teclasPressionadas['ArrowUp'] || teclasPressionadas['w']) && jogadorNoChao){
-        velocidadeVertical = forcaPulo; //basicamente, é o impulso do pulo.
-        jogadorNoChao = false;;
+        //pulo
+        if((teclasPressionadas['ArrowUp'] || teclasPressionadas['w']) && jogadorNoChao){
+            velocidadeVertical = forcaPulo; //basicamente, é o impulso do pulo.
+            jogadorNoChao = false;;
+        }
+
+        //teleportar para lados opostos
+        if (jogador.x > canvas.width){
+            jogador.x = 0;
+        }
+        if (jogador.x < 0){
+            jogador.x = canvas.width;
+        }
+        if (jogador.y > canvas.height){
+            jogador.y = 0;
+        }
+        if (jogador.y < 0){
+            jogador.y = canvas.height;
+        }
+
+        //"física"
+        velocidadeVertical += 0.15 // a velocidade de queda aumenta a cada frame
+        jogador.y += velocidadeVertical * gravidade // incrementa os valores
+
+        //desenha o jogador
+        jogador.desenha(ctx);
+
+        //desenha objetos
+        teste.desenha(ctx);
+        teste2.desenha(ctx);
+        teste3.desenha(ctx);
+
+        //chama a função de colisão
+        detectaColisao(jogador, teste);
+        detectaColisao(jogador, teste2);
+        detectaColisao(jogador, teste3);
     }
-
-
-
-    //teleportar para lados opostos
-    if (jogador.x > canvas.width){
-        jogador.x = 0;
-    }
-    if (jogador.x < 0){
-        jogador.x = canvas.width;
-    }
-    if (jogador.y > canvas.height){
-        jogador.y = 0;
-    }
-    if (jogador.y < 0){
-        jogador.y = canvas.height;
-    }
-
-
-    //"física"
-    velocidadeVertical += 0.15 // a velocidade de queda aumenta a cada frame
-    jogador.y += velocidadeVertical * gravidade // incrementa os valores
-
-    //desenha ambos retangulos
-    jogador.desenha(ctx);
-    teste.desenha(ctx);
-    teste2.desenha(ctx);
-
-    //chama a função de colisão
-    detectaColisao(jogador, teste);
-    detectaColisao(jogador, teste2);
-
-
-    //verifica a posicao do jogador constantemente
-    // checaPosicaoJogador()
-
-
 
     //chama animação (?)
     requestAnimationFrame(animacao);
 }
 
 animacao();
+
 
