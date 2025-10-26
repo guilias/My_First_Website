@@ -1,18 +1,7 @@
 let canvas = document.getElementById('game_canvas');
 let ctx = canvas.getContext('2d');
 
-function fisicaBasica(areaJogador, areaObjeto){
-    if(areaJogador.y < areaObjeto.y + areaObjeto.altura && areaJogador.y + areaJogador.altura > areaObjeto.y){
-        jogadorNoChao = true;
-        ctx.font = '50px Arial';
-        ctx.fillStyle = 'black';
-        ctx.fillText('...', canvas.width - 100, canvas.height);
-        jogador.y -= 5;
-    }
-    else{
-        jogadorNoChao = false;
-    }
-}
+
 
 function detectaColisao(areaJogador, areaObjeto){
     if (areaJogador.x < areaObjeto.x + areaObjeto.largura &&
@@ -20,65 +9,51 @@ function detectaColisao(areaJogador, areaObjeto){
         areaJogador.y < areaObjeto.y + areaObjeto.altura &&
         areaJogador.y + areaJogador.altura > areaObjeto.y)
         {
-           //calcula a "quantidade" em colisão entre jogador e objeto.
+           //calcula a "quantidade de pixels" em colisão entre jogador e objeto.
         const colisaoEsquerda = (areaObjeto.x + areaObjeto.largura) - areaJogador.x;
         const colisaoDireita = (areaJogador.x + areaJogador.largura) - areaObjeto.x;
         const colisaoTopo = (areaObjeto.y + areaObjeto.altura) - areaJogador.y;
         const colisaoBase = (areaJogador.y + areaJogador.altura) - areaObjeto.y;
 
-        // Encontre o menor deslocamento para resolver a colisão
+        //encontre o 'menor deslocamento para resolver a colisão'
         const minX = Math.min(colisaoEsquerda, colisaoDireita);
         const minY = Math.min(colisaoTopo, colisaoBase);
 
-        // Ajusta posição para bloquear o jogador no eixo onde a colisão é menor
+        //ajusta posição para bloquear o jogador no eixo onde a colisão é menor
         if (minX < minY) {
-            // Corrige no eixo X
+            //corrige no eixo X:
             if (colisaoEsquerda < colisaoDireita) {
-                // Colisão à esquerda do jogador (bloquear para a direita)
+                //colisão à esquerda do jogador (bloquear para a direita)
                 jogador.x = areaObjeto.x + areaObjeto.largura;
             } else {
-                // Colisão à direita do jogador (bloquear para a esquerda)
+                //colisão à direita do jogador (bloquear para a esquerda)
                 jogador.x = areaObjeto.x - areaJogador.largura;
             }
         } else {
-            // Corrige no eixo Y
+            //corrige no eixo Y:
             if (colisaoTopo < colisaoBase) {
-                // Colisão por cima do jogador (bloquear para baixo)
+                // colisão por cima do jogador
                 jogador.y = areaObjeto.y + areaObjeto.altura;
-                jogadorNoChao = false; // está no teto, não no chão
             } else {
-                // Colisão por baixo do jogador (bloquear para cima)
+                // Colisão por baixo do jogador
                 jogador.y = areaObjeto.y - areaJogador.altura;
-                jogadorNoChao = true; // está no chão
+                jogadorNoChao = true;
+                velocidadeVertical = 0;
+                console.log("Está no chão.")
+                ctx.font = "30px Arial";
+                ctx.fillStyle = "black";
+                ctx.fillText("Jogador está no chão.", canvas.width / 2, canvas.height / 2);
             }
         }
-
-        ctx.font = '50px Arial';
-        ctx.fillStyle = 'black';
-        ctx.fillText('Colisão detectada!', 10, 50);
-
+        console.log("Jogador está colidindo com objeto.")
         colisao = true;
         return true;
     } else {
-        ctx.font = '50px Arial';
-        ctx.fillStyle = 'black';
-        ctx.fillText('Colisão não detectada!', 10, 50);
+        console.log("Não há colisão.")
         colisao = false;
         return false;
     }
 };
-
-
-// function checaPosicaoJogador(){
-//     if (colisao == false){
-//         posicaoJogadorX = jogador.x
-//         posicaoJogadorY = jogador.y
-//     }
-//     else{
-//         jogador.x = posicaoJogadorX
-//         jogador.y = posicaoJogadorY
-//     }
-// }
 
 function desenhaRetangulos(cor, x, y, largura, altura){
     return {
@@ -96,23 +71,23 @@ function desenhaRetangulos(cor, x, y, largura, altura){
     };
 }
 
-function pular(){
-    if(teclasPressionadas['x'])
-        jogador.y -= 30 * 2;
-}
-
+//declara jogador e variáveis relacionadas
 let jogador = desenhaRetangulos("red", 700, 0, 80, 160);
-let jogadorNoChao;
 let colisao;
+
+let jogadorNoChao = false;
+let velocidadeVertical = 0;
+const gravidade = 2;
+const forcaPulo = -4;
+
 let posicaoJogadorX;
 let posicaoJogadorY;
 
-// let fantasma = desenhaRetangulos("black", jogador.x, jogador.y, 80, 160);
-// fantasma.x = jogador.x
-// fantasma.y = jogador.y
-
+//declara objetos
 let teste = desenhaRetangulos("blue", 0, 700, canvas.width, 10);
 let teste2 = desenhaRetangulos("blue", 100, 0, 10, canvas.height);
+
+
 
 
 
@@ -125,20 +100,25 @@ document.addEventListener('keyup', function(evento){
     teclasPressionadas[evento.key] = false;
 })
 
+
 //ONDE A MAGIA ACONTECE
 function animacao(){
-    //limpa o canvas
+    //reseta o canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     //movimento retangulo
-    if(teclasPressionadas['ArrowUp'])
-        {jogador.y -= 8;}
-    if(teclasPressionadas['ArrowDown'])
-        {jogador.y += 8;}
-    if(teclasPressionadas['ArrowLeft'])
-        {jogador.x -= 8;}
-    if(teclasPressionadas['ArrowRight'])
-        {jogador.x += 8;}
+    if(teclasPressionadas['ArrowDown'] || teclasPressionadas['s'])
+        {jogador.y += 10;}
+    if(teclasPressionadas['ArrowLeft'] || teclasPressionadas['a'])
+        {jogador.x -= 10;}
+    if(teclasPressionadas['ArrowRight'] || teclasPressionadas['d'])
+        {jogador.x += 10;}
+
+    //pulo
+    if((teclasPressionadas['ArrowUp'] || teclasPressionadas['w']) && jogadorNoChao){
+        velocidadeVertical = forcaPulo; //basicamente, é o impulso do pulo.
+        jogadorNoChao = false;;
+    }
 
 
 
@@ -156,17 +136,15 @@ function animacao(){
         jogador.y = canvas.height;
     }
 
-    
-    if (jogadorNoChao == false){
-        jogador.y += 5;
-    }
 
+    //"física"
+    velocidadeVertical += 0.15 // a velocidade de queda aumenta a cada frame
+    jogador.y += velocidadeVertical * gravidade // incrementa os valores
 
     //desenha ambos retangulos
     jogador.desenha(ctx);
     teste.desenha(ctx);
     teste2.desenha(ctx);
-    // fantasma.desenha(ctx)
 
     //chama a função de colisão
     detectaColisao(jogador, teste);
@@ -176,10 +154,7 @@ function animacao(){
     //verifica a posicao do jogador constantemente
     // checaPosicaoJogador()
 
-    fisicaBasica(jogador, teste);
 
-
-    pular()
 
     //chama animação (?)
     requestAnimationFrame(animacao);
