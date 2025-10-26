@@ -69,9 +69,37 @@ function desenhaRetangulos(cor, x, y, largura, altura){
     };
 };
 
+//sistema de dano por colisão
+function danoPorObjeto(areaJogador, objetoDano){
+    if (areaJogador.x < objetoDano.x + objetoDano.largura &&
+        areaJogador.x + areaJogador.largura > objetoDano.x &&
+        areaJogador.y < objetoDano.y + objetoDano.altura &&
+        areaJogador.y + areaJogador.altura > objetoDano.y)
+        {
+        objetoEmColisao = objetoDano;
+        ptVida -= 1;
+    }
+}
+
+function coletarCura(areaJogador, objetoCura){
+    if (curaColetada == false &&
+        areaJogador.x < objetoCura.x + objetoCura.largura &&
+        areaJogador.x + areaJogador.largura > objetoCura.x &&
+        areaJogador.y < objetoCura.y + objetoCura.altura &&
+        areaJogador.y + areaJogador.altura > objetoCura.y)
+        {
+        ptVida += 10;
+        curaColetada = true;
+    }
+}
+
 //declara jogador e variáveis relacionadas
 let jogador = desenhaRetangulos("red", 700, 0, 80, 160);
+const ptVidaMax = 100;
+let ptVida = 100;
 let colisao;
+let objetoEmColisao;
+let curaColetada = false; //variável para definir dano gerado por objetos
 
 let jogadorNoChao = false;
 let velocidadeVertical = 0;
@@ -85,6 +113,10 @@ let posicaoJogadorY;
 let teste = desenhaRetangulos("blue", 0, 700, canvas.width, 10);
 let teste2 = desenhaRetangulos("blue", 100, 0, 10, canvas.height);
 let teste3 = desenhaRetangulos("blue", canvas.width / 2, 500, 400, 10);
+//declara objetos que geram dano
+let dano = desenhaRetangulos("purple", canvas.width / 2, 490, 200, 10);
+//declara coletáveis
+let cura = desenhaRetangulos("green", canvas.width / 2, 300, 30, 30);
 
 //estado do jogo
 let jogoPausado = false;
@@ -170,11 +202,34 @@ function animacao(){
         teste.desenha(ctx);
         teste2.desenha(ctx);
         teste3.desenha(ctx);
+        dano.desenha(ctx);
 
         //chama a função de colisão
         detectaColisao(jogador, teste);
         detectaColisao(jogador, teste2);
         detectaColisao(jogador, teste3);
+
+        //chama a função de dano
+        danoPorObjeto(jogador, dano);
+        
+        //sistema de cura
+        coletarCura(jogador, cura)
+        if (curaColetada == false){
+            cura.desenha(ctx)
+        }
+        
+
+        //ajusta sistema de vida
+        if (ptVida > ptVidaMax){
+            ptVida = ptVidaMax;
+        }
+        if (ptVida < 0){
+            ptVida = 0;
+        }
+        ctx.font = "30px Arial";
+        ctx.fillStyle = "black";
+        ctx.textAlign = 'left';
+        ctx.fillText('Pontos de Vida: ' + ptVida, 50, 100);
     }
 
     //chama animação (?)
