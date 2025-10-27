@@ -1,0 +1,125 @@
+:root{
+    --cor-fundo: rgb(76, 198, 255);
+    --cor-principal: white;
+    --cor-secundaria: aliceblue;
+    --cor-hover-primaria: rgb(136, 247, 255);
+    --borda-principal: 0.2rem black solid;
+}
+
+
+/* Reseta margens padrão e define tamanho da fonte como 10px, tornando a medida REM mais prevísivel */
+*{
+    margin: 0;
+    padding: 0;
+    font-size: 10px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+/* Configuração das fontes */
+h1{
+    font-size: 5rem;
+    margin-bottom: 1.5rem;
+}
+
+h2{
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+}
+
+h3{
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+}
+
+p{
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+figcaption{
+    font-size: 1.5rem;
+    font-style: italic;
+}
+
+.navbar li{
+    width: 30%;
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
+    font-size: 1.5rem;
+    border: var(--borda-principal);
+    background-color: var(--cor-secundaria);
+}
+
+.navbar{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.navbar li:hover{
+    background-color: var(--cor-hover-primaria);
+}
+
+body{
+    background-color: var(--cor-fundo);
+}
+
+main{
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    padding: 5rem;
+    background-color: var(--cor-principal);
+    border: var(--borda-principal);
+    box-shadow: 10px 10px;
+}
+
+nav{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+.img-header h2{
+    font-family: 'Times New Roman', Times, serif;
+    font-style: oblique;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    align-items: end;
+}
+
+.img-header{
+    background-image: url(img/wesley-tingey-9-OCsKoyQlk-unsplash.jpg);
+    background-size: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 20rem;
+    padding: 0;
+    border: var(--borda-principal);
+}
+
+#persona5-hacking img{
+    border: var(--borda-principal);
+    width: 30%;
+}
+#persona5-hacking{
+    width: 100%;
+    margin: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+section{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
