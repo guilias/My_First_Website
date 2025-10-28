@@ -94,7 +94,7 @@ function coletarCura(areaJogador, objetoCura){
 }
 
 //declara jogador e variáveis relacionadas
-let jogador = desenhaRetangulos("red", 700, 0, 80, 160);
+let jogador = desenhaRetangulos("red", 700, 0, 40, 80);
 const ptVidaMax = 100;
 let ptVida = 100;
 let colisao;
@@ -104,15 +104,25 @@ let curaColetada = false; //variável para definir dano gerado por objetos
 let jogadorNoChao = false;
 let velocidadeVertical = 0;
 const gravidade = 2;
-const forcaPulo = -6;
+const forcaPulo = -4;
+const velocidadeJogador = 9;
 
 let posicaoJogadorX;
 let posicaoJogadorY;
 
+//declara inimigo
+let fantasma = desenhaRetangulos("black", 0, 0, 40, 40);
+let distanciaInimigoX;
+let distanciaInimigoY;
+let distanciaInimigoTotal;
+const velocidadeInimigo = 2;
+
 //declara objetos
-let teste = desenhaRetangulos("blue", 0, 700, canvas.width, 10);
-let teste2 = desenhaRetangulos("blue", 100, 0, 10, canvas.height);
-let teste3 = desenhaRetangulos("blue", canvas.width / 2, 500, 400, 10);
+let teto = desenhaRetangulos("gray", 0, 0, canvas.width, 10);
+let chao = desenhaRetangulos("gray", 0, canvas.height - 10, canvas.width, 10);
+let paredeEsquerda = desenhaRetangulos("gray", 0, 0, 10, canvas.height)
+let paredeDireita = desenhaRetangulos("gray", canvas.width - 10, 0, 10, canvas.height)
+let plataforma = desenhaRetangulos("gray", canvas.width / 2, 500, 400, 10);
 //declara objetos que geram dano
 let dano = desenhaRetangulos("purple", canvas.width / 2, 490, 200, 10);
 //declara coletáveis
@@ -165,11 +175,11 @@ function animacao(){
     if(jogoPausado == false){
          //movimento do jogador
         if(teclasPressionadas['ArrowDown'] || teclasPressionadas['s'])
-            {jogador.y += 10;}
+            {jogador.y += velocidadeJogador;}
         if(teclasPressionadas['ArrowLeft'] || teclasPressionadas['a'])
-            {jogador.x -= 10;}
+            {jogador.x -= velocidadeJogador;}
         if(teclasPressionadas['ArrowRight'] || teclasPressionadas['d'])
-            {jogador.x += 10;}
+            {jogador.x += velocidadeJogador;}
 
         //pulo
         if((teclasPressionadas['ArrowUp'] || teclasPressionadas['w']) && jogadorNoChao){
@@ -199,15 +209,32 @@ function animacao(){
         jogador.desenha(ctx);
 
         //desenha objetos
-        teste.desenha(ctx);
-        teste2.desenha(ctx);
-        teste3.desenha(ctx);
+        teto.desenha(ctx);
+        chao.desenha(ctx);
+        paredeEsquerda.desenha(ctx);
+        paredeDireita.desenha(ctx);
+        plataforma.desenha(ctx);
         dano.desenha(ctx);
 
+        //desenha o inimigo
+        fantasma.desenha(ctx);
+        distanciaInimigoX =  fantasma.x - jogador.x;
+        distanciaInimigoY = fantasma.y - jogador.y;
+        distanciaInimigoTotal = Math.sqrt(distanciaInimigoX * distanciaInimigoX + distanciaInimigoY * distanciaInimigoY)
+        fantasma.x -= (distanciaInimigoX/distanciaInimigoTotal) * velocidadeInimigo;
+        fantasma.y -= (distanciaInimigoY/distanciaInimigoTotal) * velocidadeInimigo;
+
+        //testando um 'for loop'
+        // for (let i = fantasma.y; i != jogador.y; i++){
+        //     fantasma.y += 1;
+        // }
+
         //chama a função de colisão
-        detectaColisao(jogador, teste);
-        detectaColisao(jogador, teste2);
-        detectaColisao(jogador, teste3);
+        detectaColisao(jogador, teto);
+        detectaColisao(jogador, chao);
+        detectaColisao(jogador, plataforma);
+        detectaColisao(jogador, paredeEsquerda);
+        detectaColisao(jogador, paredeDireita);
 
         //chama a função de dano
         danoPorObjeto(jogador, dano);
