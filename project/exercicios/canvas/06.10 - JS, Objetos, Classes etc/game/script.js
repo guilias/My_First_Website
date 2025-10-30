@@ -66,7 +66,7 @@ function desenhaRetangulos(cor, x, y, largura, altura){
             ctx.fillRect(this.x, this.y, this.largura, this.altura);
             ctx.closePath();
         }
-    };
+    }
 };
 
 //sistema de dano por colisão
@@ -93,13 +93,17 @@ function coletarCura(areaJogador, objetoCura){
     }
 }
 
+
 //declara jogador e variáveis relacionadas
-let jogador = desenhaRetangulos("red", 700, 0, 40, 80);
+let jogador = desenhaRetangulos("rgba(0, 0, 0, 0)", 700, 0, 48, 96);
 const ptVidaMax = 100;
 let ptVida = 100;
 let colisao;
 let objetoEmColisao;
 let curaColetada = false; //variável para definir dano gerado por objetos
+
+let visualJogador = new Image(32, 64)
+visualJogador.src = "img/detetivehp.png"
 
 let jogadorNoChao = false;
 let velocidadeVertical = 0;
@@ -216,6 +220,9 @@ function animacao(){
         plataforma.desenha(ctx);
         dano.desenha(ctx);
 
+        
+        ctx.drawImage(visualJogador, jogador.x, jogador.y)
+
         //desenha o inimigo
         fantasma.desenha(ctx);
         distanciaInimigoX =  fantasma.x - jogador.x;
@@ -264,5 +271,3 @@ function animacao(){
 }
 
 animacao();
-
-

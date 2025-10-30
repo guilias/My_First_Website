@@ -1,9 +1,12 @@
 :root{
     --cor-fundo: rgb(76, 198, 255);
-    --cor-principal: white;
-    --cor-secundaria: aliceblue;
-    --cor-hover-primaria: rgb(136, 247, 255);
-    --borda-principal: 0.2rem black solid;
+    --cor-principal: rgb(255, 255, 255);
+    --cor-secundaria: rgb(222, 238, 255);
+    --cor-link: rgb(10, 109, 84);
+    --cor-link-hover: rgb(255, 37, 91);
+    --cor-hover-primaria: rgb(164, 249, 255);
+    --borda-principal: 0.2rem rgb(0, 0, 0) solid;
+    --borda-secundaria: 0.1rem black solid;
 }
 
 
@@ -15,6 +18,14 @@
     font-family: 'Times New Roman', Times, serif;
 }
 
+a{
+    font-size: inherit;
+    color: var(--cor-link);
+}
+a:hover{
+    color: var(--cor-link-hover)
+}
+
 /* Configuração das fontes */
 h1{
     font-size: 5rem;
@@ -22,12 +33,12 @@ h1{
 }
 
 h2{
-    font-size: 4rem;
+    font-size: 3.5rem;
     margin-bottom: 1.5rem;
 }
 
 h3{
-    font-size: 3rem;
+    font-size: 2.2rem;
     margin-bottom: 1.5rem;
 }
 
@@ -49,6 +60,7 @@ figcaption{
     font-size: 1.5rem;
     border: var(--borda-principal);
     background-color: var(--cor-secundaria);
+    align-items: center;
 }
 
 .navbar{
@@ -56,14 +68,20 @@ figcaption{
     flex-direction: row;
     justify-content: space-around;
     width: 100%;
+    min-height: 3rem;
 }
 
 .navbar li:hover{
     background-color: var(--cor-hover-primaria);
 }
 
+/* https://unsplash.com/pt-br/fotografias/teste-padrao-geometrico-azul-e-preto-abstrato-BdmU1Q2UP3Q */
 body{
     background-color: var(--cor-fundo);
+    background-image: url(img/logan-voss-BdmU1Q2UP3Q-unsplash.jpg);
+    background-size: right;
+    background-size: contain;
+    background-repeat: repeat;
 }
 
 main{
@@ -74,7 +92,7 @@ main{
     padding: 5rem;
     background-color: var(--cor-principal);
     border: var(--borda-principal);
-    box-shadow: 10px 10px;
+    box-shadow: 1rem 1rem;
 }
 
 nav{
@@ -96,8 +114,8 @@ nav{
 }
 
 .img-header{
-    background-image: url(img/wesley-tingey-9-OCsKoyQlk-unsplash.jpg);
-    background-size: center center;
+    background-image: url(img/sam-schooler-E9aetBe2w40-unsplash.jpg);
+    background-size: right;
     background-size: cover;
     background-repeat: no-repeat;
     height: 20rem;
@@ -119,7 +137,40 @@ nav{
 }
 
 section{
+    padding-top: 2rem;
+    padding-bottom: 2rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.container-tabela{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
+}
+
+table{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: var(--borda-principal);
+    box-shadow: 0.4rem 0.4rem;
+}
+
+tr, td, th{
+    border: var(--borda-secundaria);
+    margin: 0;
+    padding: 1rem;
+}
+
+td{
+    font-size: 1.5rem;
+}
+th{
+    font-size: 2rem;
 }
